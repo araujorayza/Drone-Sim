@@ -3,16 +3,18 @@ clear all
 clc
 close all
 %% SYSTEM INIT AND SIM PARAMETERS
+% 
+% InitSTATE=[ 4;
+%             5;
+%             10;
+%             1.5;
+%             4;
+%             5;
+%             10;
+%             1.5];
 
-InitSTATE=[ 4;
-            5;
-            10;
-            1.5;
-            4;
-            5;
-            10;
-            1.5];
-
+rng('shuffle');
+InitSTATE = rand(1,8)';
 
 simStep = 0.1;
 Tfinal = 20;
