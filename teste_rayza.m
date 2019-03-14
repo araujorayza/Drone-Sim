@@ -22,8 +22,8 @@ Tfinal = 20;
 % TRAJECTORY = 'LemniscataBernoulli';
 TRAJECTORY   = 'circle';
 
-ControlType='StateFeedback';
-% ControlType='Fuzzy';
+% ControlType='StateFeedback';
+ControlType='Fuzzy';
 % ControlType='OpenLoop';
 %% Load Parameters and set time vector
 t=0:simStep:Tfinal;
