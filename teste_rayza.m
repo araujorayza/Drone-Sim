@@ -13,18 +13,23 @@ close all
 %             10;
 %             1.5];
 
-rng('shuffle');
-InitSTATE = rand(1,8)';
-
+% rng('shuffle');
+% InitSTATE = rand(1,8)';
+InitSTATE=0*[0;0;0;0;1.5;1;1;0];
 simStep = 0.1;
-Tfinal = 20;
+Tfinal = 40;
 
 % TRAJECTORY = 'LemniscataBernoulli';
 TRAJECTORY   = 'circle';
 
 % ControlType='StateFeedback';
+% ControlType='LQR';
+% ControlType='FeedbackLin';
 ControlType='Fuzzy';
 % ControlType='OpenLoop';
+
+% Saturation on the control signal
+Saturation = true;
 %% Load Parameters and set time vector
 t=0:simStep:Tfinal;
 load gamma
@@ -34,11 +39,13 @@ ControlDesign
 
 %% SYSTEM SIMULATION
 [q_d,dq_d,ddq_d]=CalcDesTrajectory(TRAJECTORY,t);
-
+figure;
+hold on;
 [t,STATE]=ode45(@(t,state) DRONE_SANTANA(t,state,...
                                         TRAJECTORY, ControllerStruct, gamma),...
                                          t,InitSTATE);
 %% OUTPUT PLOTTING
+figure;
 plot(q_d(1,:),q_d(2,:),'*');
 hold on;
 plot(STATE(:,5),STATE(:,6));
@@ -46,7 +53,7 @@ hold off
 grid on
 axis equal
 legend
-
+Knew=gen_K4cpp(K);
 
 % figure;
 % plot(t,q_d(4,:),'*');

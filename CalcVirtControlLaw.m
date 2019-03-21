@@ -1,4 +1,5 @@
-function U = CalcVirtControlLaw(Controller,t,State,DesState)
+function U = CalcVirtControlLaw(Controller,t,State,DesAcc,DesVel,DesPos)
+    DesState = [DesVel;DesPos];
     K=Controller.Gain;
     
     switch Controller.type
@@ -9,8 +10,7 @@ function U = CalcVirtControlLaw(Controller,t,State,DesState)
                                     %is the error in position and velocity
             
         case 'Fuzzy'
-            min=1;
-            max=2;
+            min=1;max=2;
             
             Z = Controller.Fuzzy_Z;
             z = Controller.Fuzzy_z;
@@ -18,7 +18,7 @@ function U = CalcVirtControlLaw(Controller,t,State,DesState)
             psi = State(8);
             
             for i=1:length(z)
-                M(i,1) = (Z(i,max) - z{i}(psi))/(Z(i,max)-Z(i,min));
+                M(i,1) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min));
                 M(i,2) = 1 - M(i,1);
             end
             
@@ -26,12 +26,27 @@ function U = CalcVirtControlLaw(Controller,t,State,DesState)
             
             U = [0;0;0;0];
             for i=1:length(K)
-               U = U - K{i,1}*h(i)*(State - DesState);
+               U = U - K{1,i}*h(i)*(State - DesState);
                                     %this control law was designed for the  
                                     %error dynamics so the 'state' it uses
                                     %is the error in position and velocity
             end
             
+        case 'LQR'
+            U=-K*(State - DesState);
+        case 'FeedbackLin'
+            psi = State(8);
+            N = [ gamma(2)*cos(psi), -gamma(4)*sin(psi),      0,        0;
+                gamma(2)*sin(psi),  gamma(4)*cos(psi),      0,        0;
+                0,                  0,              gamma(6),   0;
+                0,                  0,                0,    gamma(8)];
+            
+
+            R = [ cos(psi),    -sin(psi),      0,    0;
+                  sin(psi),     cos(psi),      0,    0;
+                    0,          0,         1,    0;
+                    0,          0,         0,    1];
+            U = [N*R'-K{1}, -K{2}]*(State - DesState);
         case 'OpenLoop'
            U=zeros(4,length(t)); 
         otherwise

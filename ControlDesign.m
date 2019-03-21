@@ -1,4 +1,5 @@
 ControllerStruct.type    = ControlType;
+ControllerStruct.sat     = Saturation;
 switch ControlType
     case 'StateFeedback'
         psi=InitSTATE(8);
@@ -7,9 +8,15 @@ switch ControlType
     case 'Fuzzy'
         [K,Z]=ControlDesign_Fuzzy(gamma);
         ControllerStruct.Fuzzy_Z=Z;
-        ControllerStruct.Fuzzy_z={@(Psi) gamma(2)*cos(Psi)^2+gamma(4)*sin(Psi)^2;
-                                  @(Psi) (gamma(2)-gamma(4))*sin(2*Psi)/2};
-                              
+        ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
+                                  @(Psi) sin(Psi)};
+    case 'LQR'
+        psi=InitSTATE(8);
+        K=ControlDesign_LQR(psi);
+    case 'FeedbackLin'
+        K=cell(2,1);
+        K{1}=10*eye(4);
+        K{2}=10*eye(4);
     case 'OpenLoop'
         K = zeros(4);
     otherwise

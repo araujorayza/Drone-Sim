@@ -2,19 +2,19 @@ function [q_d,dq_d,ddq_d]=CalcDesTrajectory(type,t)
     switch type
         case 'circle'
             raio = 1.5;
-            
-            q_d =   [raio*cos(t);
-                    raio*sin(t);
+            w=1/raio;
+            q_d =   [raio*cos(w*t);
+                    raio*sin(w*t);
                     ones(1,length(t));
-                    t];
+                    zeros(1,length(t))];
             
-            dq_d =  [-raio*sin(t);
-                    raio*cos(t);
+            dq_d =  [-raio*w*sin(w*t);
+                    raio*w*cos(w*t);
                     zeros(1,length(t));
-                    ones(1,length(t))];
+                    zeros(1,length(t))];
             
-            ddq_d = [-raio*cos(t);
-                    -raio*sin(t);
+            ddq_d = [-raio*w^2*cos(w*t);
+                    -raio*w^2*sin(w*t);
                     zeros(1,length(t));
                     zeros(1,length(t))]; 
                 
