@@ -1,8 +1,8 @@
 function [q_d,dq_d,ddq_d]=CalcDesTrajectory(type,t)
     switch type
         case 'circle'
-            raio = 1.5;
-            w=1/raio;
+            raio = 0.3;
+            w=0.5;
             q_d =   [raio*cos(w*t);
                     raio*sin(w*t);
                     ones(1,length(t));

@@ -14,9 +14,10 @@ function Knew = gen_K4cpp(K)
 %     end
 %     formatSTR=strcat(formatSTR,'\n')
     Knew
-    size(Knew)
     fid=fopen('K_cpp.txt','w');
-    fprintf(fid,'%6.4f, %6.4f, %6.4f, %6.4f, %6.4f, %6.4f, %6.4f, %6.4f,\n',Knew);
+%     Ktest=[1 2 3; 4 5 6; 7 8 9];
+    fprintf(fid,'%6.4f, %6.4f, %6.4f, %6.4f, %6.4f, %6.4f, %6.4f, %6.4f,\n',Knew');
+%     fprintf(fid,'%6.4f, %6.4f, %6.4f \n',Ktest');
     fclose(fid);
    
 end

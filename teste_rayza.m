@@ -41,9 +41,13 @@ ControlDesign
 [q_d,dq_d,ddq_d]=CalcDesTrajectory(TRAJECTORY,t);
 figure;
 hold on;
-[t,STATE]=ode45(@(t,state) DRONE_SANTANA(t,state,...
-                                        TRAJECTORY, ControllerStruct, gamma),...
-                                         t,InitSTATE);
+% [t,STATE]=ode45(@(t,state) DRONE_SANTANA(t,state,...
+%                                         TRAJECTORY, ControllerStruct, gamma),...
+%                                          t,InitSTATE);
+
+STATE=ode4(@DRONE_SANTANA,t,InitSTATE,...
+                                TRAJECTORY, ControllerStruct, gamma);
+
 %% OUTPUT PLOTTING
 figure;
 plot(q_d(1,:),q_d(2,:),'*');
@@ -54,7 +58,7 @@ grid on
 axis equal
 legend
 Knew=gen_K4cpp(K);
-
+gamma=gamma'
 % figure;
 % plot(t,q_d(4,:),'*');
 % hold on;

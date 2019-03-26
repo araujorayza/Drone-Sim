@@ -24,7 +24,10 @@ function dSTATE = DRONE_SANTANA(t,STATE,trajectory,Controller,gamma)
     B=[M;zeros(n)];
     
     [q_d,dq_d,ddq_d]=CalcDesTrajectory(trajectory,t);
-%     STATE=KalmanFilter(STATE);
+    
+%     noise=wgn(8,1,0.1,'dBm');
+%     STATE_B4=STATE
+%     STATE=KalmanFilter(STATE+noise,t)
     U = CalcVirtControlLaw(Controller,t,STATE,ddq_d,dq_d,q_d);
     
     V=M\(U + N*R'*dq_d + ddq_d);
