@@ -32,6 +32,28 @@ function U = CalcVirtControlLaw(Controller,t,State,DesAcc,DesVel,DesPos)
                                     %is the error in position and velocity
             end
             
+        case 'FuzzyWithZuncertainty'    
+            min=1;max=2;
+            
+            Z = Controller.Fuzzy_Z;
+            z = Controller.Fuzzy_z;
+            
+            psi = State(8);
+            
+            for i=1:length(z)
+                M(i,1) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min));
+                M(i,2) = 1 - M(i,1);
+            end
+            
+            h=CalcDefuzzWeights(M);
+            
+            U = [0;0;0;0];
+            for i=1:length(K)/2
+               U = U - K{1,i}*h(i)*(State - DesState);
+                                    %this control law was designed for the  
+                                    %error dynamics so the 'state' it uses
+                                    %is the error in position and velocity
+            end
         case 'LQR'
             U=-K*(State - DesState);
         case 'FeedbackLin'

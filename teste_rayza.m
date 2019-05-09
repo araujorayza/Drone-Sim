@@ -12,7 +12,7 @@ close all
 %             5;
 %             10;
 %             1.5];
-
+% gamma= [4.3321, 0.2333, 4.1220, 0.4145, 4.4206, 3.1341, 5.9289, -0.3868]';
 % rng('shuffle');
 % InitSTATE = rand(1,8)';
 InitSTATE=0*[0;0;0;0;1.5;1;1;0];
@@ -26,6 +26,7 @@ TRAJECTORY   = 'circle';
 % ControlType='LQR';
 % ControlType='FeedbackLin';
 ControlType='Fuzzy';
+% ControlType='FuzzyWithZuncertainty';
 % ControlType='OpenLoop';
 
 % Saturation on the control signal
@@ -57,7 +58,8 @@ hold off
 grid on
 axis equal
 legend
-Knew=gen_K4cpp(K);
+% Knew=gen_K4cpp(K);
+[K{1};K{2};K{3};K{4}]
 gamma=gamma'
 % figure;
 % plot(t,q_d(4,:),'*');
