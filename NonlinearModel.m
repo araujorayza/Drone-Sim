@@ -13,6 +13,3 @@ R = @(psi)[ cos(psi),    -sin(psi),      0,    0;
             sin(psi),     cos(psi),      0,    0;
                   0,          0,         1,    0;
                   0,          0,         0,    1];
-
-{@(Psi) gamma(2)*cos(Psi)^2+gamma(4)*sin(Psi)^2;
-                                  @(Psi) (gamma(2)-gamma(4))*sin(2*Psi)/2};
