@@ -1,3 +1,5 @@
+% load gamma gamma
+gamma = sym('gamma',[8 1]);
 
 M = @(psi)[ gamma(1)*cos(psi), -gamma(3)*sin(psi),      0,        0;
             gamma(1)*sin(psi),  gamma(3)*cos(psi),      0,        0;

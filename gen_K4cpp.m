@@ -1,5 +1,5 @@
 function Knew = gen_K4cpp(K)
-    K=K{1:4};
+%     K=K{1:4};
     Tamlin_K = length(K)*size(K{1},1);
     Tamcol_K = size(K{1},2);
     

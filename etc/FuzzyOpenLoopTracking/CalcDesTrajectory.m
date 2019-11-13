@@ -36,8 +36,8 @@ function [q_d,dq_d,ddq_d]=CalcDesTrajectory(type,t)
                     zeros(1,length(t));
                     zeros(1,length(t))];
         otherwise
-            q_d     = zeros(4,length(t));
-            dq_d    = zeros(4,length(t));
-            ddq_d   = zeros(4,length(t));
+            q_d=zeros(4,length(t));
+            dq_d=zeros(4,length(t));
+            ddq_d=zeros(4,length(t));
     end
 end

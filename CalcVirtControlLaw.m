@@ -70,7 +70,13 @@ function U = CalcVirtControlLaw(Controller,t,State,DesAcc,DesVel,DesPos)
                     0,          0,         0,    1];
             U = [N*R'-K{1}, -K{2}]*(State - DesState);
         case 'OpenLoop'
-           U=zeros(4,length(t)); 
+           U=zeros(4,length(t));
+           U=ones(length(t)).*[sin(t)+sin(1.3*t);
+                               -cos(4*t)-cos(5.3*t);
+                               sin(2*t)+sin(2.3*t);
+                               cos(0.5*t)+cos(0.3*t)];
+                           
+           disp('Virtual Control is open loop')
         otherwise
            U=zeros(4,length(t)); 
     end

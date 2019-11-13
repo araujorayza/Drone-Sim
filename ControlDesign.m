@@ -24,9 +24,14 @@ switch ControlType
         K{2}=10*eye(4);
     case 'OpenLoop'
         K = zeros(4);
+        ControllerStruct.Fuzzy_Z=0;
+        ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
+                                  @(Psi) sin(Psi)};
+        disp('Controller set to open loop')
     otherwise
         K=[];
         disp('The controller you chose is not an option!')
 end
 ControllerStruct.Gain    = K;
+% global U;
 

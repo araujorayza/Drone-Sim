@@ -1,6 +1,6 @@
 Definitions;
 
-disp('O modelo é dado por dx = Ax + Bv, com x = [dq q]^T');
+disp('O modelo eh dado por dx = Ax + Bv, com x = [dq q]^T');
 
 n=length(N);
 
