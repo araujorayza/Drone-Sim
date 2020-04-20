@@ -2,7 +2,8 @@
 clear all
 clc
 close all
-
+ 
+cd /home/lac/Dropbox/00_USP/00_DR/Activities/00_Drone_Sim_WS
 %% SYSTEM INIT AND SIM PARAMETERS
 
 % ChangeGamma

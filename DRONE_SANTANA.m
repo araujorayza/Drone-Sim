@@ -1,4 +1,9 @@
-function dSTATE = DRONE_SANTANA(t,STATE,trajectory,Controller,gamma)
+function dSTATE = DRONE_SANTANA(t,STATE,Simu)%trajectory,Controller,gamma,WindDisturbance)
+    gamma = Simu.sys.param;
+    trajectory = Simu.trajectory;
+    controller = Simu.controller;
+    
+
     psi=STATE(8);
 
     M = [ gamma(1)*cos(psi), -gamma(3)*sin(psi),      0,        0;
@@ -26,15 +31,23 @@ function dSTATE = DRONE_SANTANA(t,STATE,trajectory,Controller,gamma)
     [q_d,dq_d,ddq_d]=CalcDesTrajectory(trajectory,t);
     
 
-    U = CalcVirtControlLaw(Controller,t,STATE,ddq_d,dq_d,q_d);
+    U = CalcVirtControlLaw(controller,t,STATE,ddq_d,dq_d,q_d);
     
     
     V=M\(U + N*R'*dq_d + ddq_d);
     
-    if (Controller.sat)
+    if (controller.sat)
         V=saturate_control(V);
     end
+    
+    hold on
+    plot(t,V,'dk') %plot control law
      
-%     plot(t,V,'dk') %plot control law
     dSTATE = A*STATE + B*V;
+    
+    
+    if(Simu.WindDisturbance.Type)
+        dSTATE(5:8) = dSTATE(5:8) + WindDisturbance(t,Simu.WindDisturbance);
+    end
+
 end

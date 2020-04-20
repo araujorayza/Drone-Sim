@@ -1,5 +1,6 @@
 ControllerStruct.type    = ControlType;
 ControllerStruct.sat     = Saturation;
+
 switch ControlType
     case 'StateFeedback'
         psi=InitSTATE(8);
@@ -15,6 +16,19 @@ switch ControlType
         ControllerStruct.Fuzzy_Z=Z;
         ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
                                   @(Psi) sin(Psi)};
+                              
+    case 'FuzzywithParamUncertainty'
+        [K,Z]=ControlDesign_FuzzywithParamUncertainty(gamma,MaxRotSpd);
+        ControllerStruct.Fuzzy_Z=Z;
+        ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
+                                  @(Psi) sin(Psi)};
+        
+    case 'FuzzyParamUncertaintyDisturbance'
+        [K,Z]=ControlDesign_FuzzyParamUncertaintyDisturbance(gamma,MaxRotSpd);
+        ControllerStruct.Fuzzy_Z=Z;
+        ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
+                                  @(Psi) sin(Psi)};
+        
     case 'LQR'
         psi=InitSTATE(8);
         K=ControlDesign_LQR(psi);

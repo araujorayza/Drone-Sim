@@ -12,3 +12,5 @@ pretty(A)
 B=[M;zeros(n)]
 
 
+
+
