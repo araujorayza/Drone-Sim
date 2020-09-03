@@ -7,6 +7,7 @@ close all
 
 % ChangeGamma
 InitSTATE=[0;0;0;0;.5;0;1;0];
+sphinx = true; %flag for which gamma we use
 
 simStep = 0.25;
 Tfinal  = 25;
@@ -45,7 +46,12 @@ DisturbanceTime = [3 Tfinal];
 
 %% Load Parameters and set time vector
 t=0:simStep:Tfinal;
-load gamma
+if(sphinx)
+    load gamma_sphinx
+else
+    load gamma_bebop
+end
+
 
 SimStruct.trajectory=TRAJECTORY;
 SimStruct.sys.param = gamma;
