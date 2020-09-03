@@ -8,6 +8,7 @@ close all
 % ChangeGamma
 InitSTATE=[0;0;0;0;.5;0;1;0];
 sphinx = true; %flag for which gamma we use
+tol = 12;
 
 simStep = 0.25;
 Tfinal  = 25;
@@ -17,11 +18,11 @@ TRAJECTORY      = 'circle';
 
 
 % ControlType     = 'FuzzywithParamUncertainty';
-ControlType     = 'FuzzyParamUncertaintyDisturbance';
+% ControlType     = 'FuzzyParamUncertaintyDisturbance';
 % ControlType='StateFeedback';
 % ControlType='LQR';
 % ControlType='FeedbackLin';
-% ControlType='Fuzzy';
+ControlType='Fuzzy';
 % ControlType='FuzzyWithZuncertainty';
 
 
@@ -207,5 +208,5 @@ title('yaw(t)')
 %%
 % GeneratePlots;
 
-
+Check_FuzzyTracking;
 

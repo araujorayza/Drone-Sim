@@ -40,8 +40,8 @@ function dSTATE = DRONE_SANTANA(t,STATE,Simu)%trajectory,Controller,gamma,WindDi
         V=saturate_control(V);
     end
     
-    hold on
-    plot(t,V,'dk') %plot control law
+%     hold on
+%     plot(t,V,'dk') %plot control law
      
     dSTATE = A*STATE + B*V;
     
