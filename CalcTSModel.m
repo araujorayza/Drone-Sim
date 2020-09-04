@@ -52,7 +52,7 @@ function [A,B,h] = CalcTSModel(gamma)
 
     for i=1:ri
         for j=1:ri
-            A{i,j}=double([-N{i}*R{j}' 0*eye(4);
+            A{i,j}=double([-N{i}*R{j}' zeros(4);
                 eye(4) zeros(4)]);
         end
         B{i}=double([eye(4);
@@ -105,8 +105,8 @@ function [h] = MembFunc(z,Z)
     H = sym('H',[length(z) 2]);
     
     for i=1:length(z)
-        H(i,1) = (Z(i,MAX)- z(i))/(Z(i,MAX)-Z(i,MIN)); %it's 1 when z = min
-        H(i,2) =  1 - H(i,1);
+        H(i,MIN) = (Z(i,MAX)- z(i))/(Z(i,MAX)-Z(i,MIN)); %it's 1 when z = min
+        H(i,MAX) =  1 - H(i,MIN);
     end
     
     numLines = 2^(size(H,1)); %number of h functions is the # of possible

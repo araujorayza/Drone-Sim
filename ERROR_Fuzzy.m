@@ -3,16 +3,16 @@ function dERROR = ERROR_Fuzzy(t,ERROR,Simu)
     B = Simu.controller.model.B;
     
     trajectory = Simu.trajectory;
-    [q_d,dq_d,ddq_d]=CalcDesTrajectory(trajectory,t);
+    [q_d,dq_d,~]=CalcDesTrajectory(trajectory,t);
     DES_STATE = [dq_d;q_d];
-    psi = ERROR(8)+ DES_STATE(8);
+    Psi = ERROR(8)+ DES_STATE(8);
     h = Simu.controller.model.h;
-    h = subs(h,'psi',psi);
+    h = subs(h,'psi',Psi);
     h = double(h);
     
          
     STATE = ERROR + DES_STATE; 
-    U = CalcVirtControlLaw(Simu.controller,t,STATE,DES_STATE);
+    V = CalcVirtControlLaw(Simu.controller,t,STATE,DES_STATE);
 
     if(Simu.controller.model.type == 1)
         Ah     = 0*A{1,1};
@@ -33,9 +33,5 @@ function dERROR = ERROR_Fuzzy(t,ERROR,Simu)
     end 
     
     
-    dERROR = Ah*ERROR + Bh*U;
-    
-    if(Simu.WindDisturbance.Type)
-        dERROR(5:8) = dERROR(5:8) + WindDisturbance(t,Simu.WindDisturbance);
-    end
+    dERROR = Ah*ERROR + Bh*V;
 end

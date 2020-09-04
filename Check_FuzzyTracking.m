@@ -1,8 +1,6 @@
 %% SCRIPT FOR TESTING THE TRACKING OF TSFUZZY MODEL
 
 %% Check Nonzero entries of the simulation results
-
- 
 for i = VelX:PosYaw
     ERR = ERROR(:,i)+ DES_STATE(:,i) ...
         - STATE(:,i);
