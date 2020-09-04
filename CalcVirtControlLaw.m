@@ -1,6 +1,5 @@
-function U = CalcVirtControlLaw(Controller,t,State,DesAcc,DesVel,DesPos)
-    DesState = [DesVel;DesPos];
-    K=Controller.Gain;
+function U = CalcVirtControlLaw(Controller,t,State,DesState)
+    K=Controller.gain;
     
     switch Controller.type
         case 'StateFeedback'
@@ -10,92 +9,55 @@ function U = CalcVirtControlLaw(Controller,t,State,DesAcc,DesVel,DesPos)
                                     %is the error in position and velocity
             
         case 'Fuzzy'
-            min=1;max=2;
-            
-            Z = Controller.Fuzzy_Z;
-            z = Controller.Fuzzy_z;
-            
-            psi = State(8);
-            
-            for i=1:length(z)
-                M(i,1) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min));
-                M(i,2) = 1 - M(i,1);
-            end
-            
-            h=CalcDefuzzWeights(M);
+            h = Controller.model.h;
+            h = subs(h,'psi',State(8));
+            h = double(h);
             
             U = [0;0;0;0];
             for i=1:length(K)
-               U = U - K{1,i}*h(i)*(State - DesState);
+               U = U - K{i}*h(i)*(State - DesState);
                                     %this control law was designed for the  
                                     %error dynamics so the 'state' it uses
                                     %is the error in position and velocity
             end
             
         case 'FuzzyWithZuncertainty'    
-            min=1;max=2;
+
+            h = Controller.Fuzzy_h;
             
-            Z = Controller.Fuzzy_Z;
-            z = Controller.Fuzzy_z;
-            
-            psi = State(8);
-            
-            for i=1:length(z)
-                M(i,1) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min));
-                M(i,2) = 1 - M(i,1);
-            end
-            
-            h=CalcDefuzzWeights(M);
+            h = subs(h,'psi',State(8));
             
             U = [0;0;0;0];
             for i=1:length(K)/2
-               U = U - K{1,i}*h(i)*(State - DesState);
+               U = U - double(K{1,i}*h(i)*(State - DesState));
                                     %this control law was designed for the  
                                     %error dynamics so the 'state' it uses
                                     %is the error in position and velocity
             end
             
         case 'FuzzywithParamUncertainty'
-            min=1;max=2;
             
-            Z = Controller.Fuzzy_Z;
-            z = Controller.Fuzzy_z;
+            h = Controller.Fuzzy_h;
             
-            psi = State(8);
-            
-            for i=1:length(z)
-                M(i,1) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min));
-                M(i,2) = 1 - M(i,1);
-            end
-            
-            h=CalcDefuzzWeights(M);
+            h = subs(h,'psi',State(8));
             
             U = [0;0;0;0];
             for i=1:length(K)
-               U = U - K{1,i}*h(i)*(State - DesState);
+               U = U - double(K{1,i}*h(i)*(State - DesState));
                                     %this control law was designed for the  
                                     %error dynamics so the 'state' it uses
                                     %is the error in position and velocity
             end
             
         case 'FuzzyParamUncertaintyDisturbance'
-            min=1;max=2;
+
+            h = Controller.Fuzzy_h;
             
-            Z = Controller.Fuzzy_Z;
-            z = Controller.Fuzzy_z;
-            
-            psi = State(8);
-            
-            for i=1:length(z)
-                M(i,1) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min));
-                M(i,2) = 1 - M(i,1);
-            end
-            
-            h=CalcDefuzzWeights(M);
+            h = subs(h,'psi',State(8));
             
             U = [0;0;0;0];
             for i=1:length(K)
-               U = U - K{1,i}*h(i)*(State - DesState);
+               U = U - double(K{1,i}*h(i)*(State - DesState));
                                     %this control law was designed for the  
                                     %error dynamics so the 'state' it uses
                                     %is the error in position and velocity
@@ -119,17 +81,16 @@ function U = CalcVirtControlLaw(Controller,t,State,DesAcc,DesVel,DesPos)
                     0,          0,         1,    0;
                     0,          0,         0,    1];
             U = [N*R'-K{1}, -K{2}]*(State - DesState);
-        case 'OpenLoop'
+            
+        case 'openloop'
            U=zeros(4,length(t));
            U=ones(length(t)).*[sin(t)+sin(1.3*t);
                                -cos(4*t)-cos(5.3*t);
                                sin(2*t)+sin(2.3*t);
                                cos(0.5*t)+cos(0.3*t)];
                            
-           disp('Virtual Control is open loop')
+           %disp('Virtual Control is open loop')
         otherwise
            U=zeros(4,length(t)); 
     end
-
-
 end

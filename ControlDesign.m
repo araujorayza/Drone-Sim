@@ -1,5 +1,8 @@
-ControllerStruct.type    = ControlType;
-ControllerStruct.sat     = Saturation;
+if(Modeltype == 1)
+    [A,B,h] = CalcTSModel(gamma);
+elseif(Modeltype == 2)
+    
+end
 
 switch ControlType
     case 'StateFeedback'
@@ -7,10 +10,12 @@ switch ControlType
         K=ControlDesign_LinearStateFeedback(psi);
         
     case 'Fuzzy'
-        [K,Z]=ControlDesign_Fuzzy(gamma);
-        ControllerStruct.Fuzzy_Z=Z;
-        ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
-                                  @(Psi) sin(Psi)};
+        fi=0.01*ones(size(A,2));
+        mu=0.1;
+        in=3;
+
+        K = LMI_Teo51 (A,B,fi,mu,in);  
+        
     case 'FuzzyWithZuncertainty'
         [K,Z]=ControlDesign_Fuzzy_Z_uncertainty(gamma);
         ControllerStruct.Fuzzy_Z=Z;
@@ -36,16 +41,20 @@ switch ControlType
         K=cell(2,1);
         K{1}=10*eye(4);
         K{2}=10*eye(4);
-    case 'OpenLoop'
+        
+    case 'openloop'
         K = zeros(4);
-        ControllerStruct.Fuzzy_Z=0;
-        ControllerStruct.Fuzzy_z={@(Psi) cos(Psi);
-                                  @(Psi) sin(Psi)};
         disp('Controller set to open loop')
+        
     otherwise
         K=[];
         disp('The controller you chose is not an option!')
 end
-ControllerStruct.Gain    = K;
-% global U;
+SimStruct.sys.sat = Saturation;
 
+SimStruct.controller.type = ControlType;
+SimStruct.controller.model.type = Modeltype;
+SimStruct.controller.model.A = A;
+SimStruct.controller.model.B = B;
+SimStruct.controller.model.h = h;
+SimStruct.controller.gain    = K;

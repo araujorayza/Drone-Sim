@@ -1,46 +1,37 @@
-function dERROR = ERROR_Fuzzy(t,ERROR,Simu) %trajectory,Controller,gamma)
-    gamma = Simu.sys.param;
+function dERROR = ERROR_Fuzzy(t,ERROR,Simu)
+    A = Simu.controller.model.A;
+    B = Simu.controller.model.B;
+    
     trajectory = Simu.trajectory;
-    controller = Simu.controller;
+    [q_d,dq_d,~]=CalcDesTrajectory(trajectory,t);
+    DES_STATE = [dq_d;q_d];
+    Psi = ERROR(8)+ DES_STATE(8);
+    h = Simu.controller.model.h;
+    h = subs(h,'psi',Psi);
+    h = double(h);
+    
+         
+    STATE = ERROR + DES_STATE; 
+    V = CalcVirtControlLaw(Simu.controller,t,STATE,DES_STATE);
 
-    [~,B,M,N,R,Z] = CalcTSModel(gamma);
+    if(Simu.controller.model.type == 1)
+        Ah     = 0*A{1,1};
+        Bh     = 0*B{1};
+        for i=1:length(h)
+            for j = 1:length(h)
+                Ah=Ah+h(i)*h(j)*A{i,j};
+            end
+            Bh=Bh+h(i)*B{i};
+        end 
+    elseif(Simu.controller.model.type == 2)
+        Ah     = 0*A{1};
+        Bh     = 0*B{1};
+        for i=1:length(h)
+            Ah=Ah+h(i)*A{i};
+            Bh=Bh+h(i)*B{i};
+        end
+    end 
     
-    [q_d,dq_d,ddq_d]=CalcDesTrajectory(trajectory,t);
-    DES_POS = [dq_d;q_d];
-    psi = ERROR(8)+ DES_POS(8);
     
-    min=1;max=2;
-%     Z = Controller.Fuzzy_Z;
-    z = {@(Psi) cos(Psi);
-         @(Psi) sin(Psi)};
-        
-    H = zeros(length(z),2);
-    for i=1:length(z)
-        H(i,min) = (z{i}(psi)-Z(i,min))/(Z(i,max)-Z(i,min)); %this is inverted like this. 
-        H(i,max) = 1 - H(i,1);
-    end
-    
-    h=CalcDefuzzWeights(H);
-    
-    K=controller.Gain;
-       
-    STATE = ERROR + DES_POS;
-    U = CalcVirtControlLaw(controller,t,STATE,ddq_d,dq_d,q_d);
-
-    dERROR = 0*ERROR;
-    Nh     = 0*N{1,1};
-    Rh     = 0*R{1,1};
-    Bh     = 0*B{1,1};
-    
-    for k=1:length(h)
-        Nh=Nh+h(k)*N{1,k};
-        Rh=Rh+h(k)*R{1,k};
-        Bh=Bh+h(k)*B{1,k};
-    end
-    
-    dERROR = [-Nh*Rh' zeros(4);eye(4) zeros(4)]*ERROR + Bh*U;
-    
-    if(Simu.WindDisturbance.Type)
-        dERROR(5:8) = dERROR(5:8) + WindDisturbance(t,Simu.WindDisturbance);
-    end
+    dERROR = Ah*ERROR + Bh*V;
 end
