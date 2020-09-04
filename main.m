@@ -29,14 +29,12 @@ TRAJECTORY      = 'circle';
 % TRAJECTORY = 'LemniscataBernoulli';
 
 
-% ControlType     = 'FuzzywithParamUncertainty';
-% ControlType     = 'FuzzyParamUncertaintyDisturbance';
 % ControlType='StateFeedback';
 % ControlType='LQR';
 % ControlType='FeedbackLin';
 ControlType = 'Fuzzy';
 % ControlType = 'openloop';
-% ControlType='FuzzyWithZuncertainty';
+
 
 Modeltype = 1;
 
