@@ -11,28 +11,21 @@ PosX    = 5;
 PosY    = 6;
 PosZ    = 7;
 PosYaw  = 8;
-
-
-
 %% SYSTEM INIT AND SIM PARAMETERS
 
-% ChangeGamma
 InitSTATE=rand([8,1]); %[0;0;0;0;0;0;0;0];
 sphinx = true; %flag for which gamma we use
 tol = 12;
 
-simStep = 0.25;
-Tfinal  = 25;
+simStep = 0.025;
+Tfinal  = 30gi;
 
 TRAJECTORY      = 'circle';
 % TRAJECTORY      = 'openloop';
 % TRAJECTORY = 'LemniscataBernoulli';
 
 
-% ControlType='StateFeedback';
-% ControlType='LQR';
-% ControlType='FeedbackLin';
-ControlType = 'Fuzzy';
+ControlType = 'MozelliTeo6';
 % ControlType = 'openloop';
 
 
@@ -89,7 +82,7 @@ InitERROR = InitSTATE - DES_STATE(1,:)';
 % STATE = ode4(@DRONE_SANTANA,t,InitSTATE,...                            %TRAJECTORY, ControllerStruct, gamma);
 %                                  SimStruct);
 % ERROR = ode4(@ERROR_Fuzzy,t,InitERROR,...
-%                                 SimStruct);  
+%                                 SimStruct); 
 
 
 options = odeset('RelTol',1e-13,'AbsTol',1e-20);
