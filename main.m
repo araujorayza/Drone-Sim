@@ -18,7 +18,7 @@ sphinx = true; %flag for which gamma we use
 tol = 12;
 
 simStep = 0.025;
-Tfinal  = 30gi;
+Tfinal  = 30;
 
 TRAJECTORY      = 'circle';
 % TRAJECTORY      = 'openloop';
