@@ -1,8 +1,4 @@
-if(Modeltype == 1)
-    [A,B,h] = CalcTSModel(gamma);
-elseif(Modeltype == 2)
-    
-end
+[A,B,h] = ErrorModeling(Modeltype,gamma);
 
 switch ControlType
     case 'openloop'
@@ -15,7 +11,7 @@ switch ControlType
         
         if(Modeltype == 1)
             K = LMI_Teo6MozelliMOD(A,B,fi,mu);
-        elseif(Modeltype == 2)
+        else
             K = LMI_Teo6Mozelli(A,B,fi,mu);
         end
         ControlType = 'PDC';
@@ -23,6 +19,7 @@ switch ControlType
         K=[];
         disp('The controller you chose is not an option!')
 end
+
 SimStruct.sys.sat = Saturation;
 
 SimStruct.controller.type = ControlType;

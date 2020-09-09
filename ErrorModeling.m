@@ -116,7 +116,10 @@ function [A,B,h] = ErrorModeling(option,gamma)
             %             A_{22} = A_{33}
             %             A_{23} = A_{32}
             %             A_{24} = A_{31}
+<<<<<<< HEAD
             % the h here does not sum 1
+=======
+>>>>>>> 353ce1071855137af983b697e9a9b365f9addd2b
             [A,B,h]=ErrorModeling(1,gamma);
             ri=4;
             H=sym('H',[10 1]);
