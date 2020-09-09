@@ -78,10 +78,6 @@ function [A,B,h] = ErrorModeling(option,gamma)
             Z=[z10 z11;
                 z20 z21];
 
-            M=[];
-            N=[];
-            R=[];
-
             % Model matrices
             A=cell(1,ri);
             B=cell(1,ri);
@@ -98,7 +94,7 @@ function [A,B,h] = ErrorModeling(option,gamma)
                     z(2), z(1)-(gamma(4)+gamma(2)),     0,            0;
                     0,              0,              -gamma(6),        0;
                     0,              0,                  0,     -gamma(8)];
-                A{i} = double([NRt,    -small_k*eye(4);
+                A{i} = double([NRt,    0*eye(4);
                     eye(4),  zeros(4)]);
 
                 B{i} = double([eye(4);
@@ -120,7 +116,7 @@ function [A,B,h] = ErrorModeling(option,gamma)
             %             A_{22} = A_{33}
             %             A_{23} = A_{32}
             %             A_{24} = A_{31}
-            [A,B,~,h,~]=ErrorModeling(1,gamma);
+            [A,B,h]=ErrorModeling(1,gamma);
             ri=4;
             H=sym('H',[10 1]);
             G=cell(1,10);
@@ -138,17 +134,15 @@ function [A,B,h] = ErrorModeling(option,gamma)
                     k=k+1;
                 end
             end
-            %clear h
-            z=[];
-            Z=[];
             h=simplify(H);
+            %the h here does not sum 1
+            %so you wont have B = sum(Bi*hi);
             A=G;
             B=F;
-            %clear H G F
 
         case 4
             %This has been tested and is tracking the nonlinear system
-            [A,B,~,h,~]=ErrorModeling(1,gamma);
+            [A,B,h]=ErrorModeling(1,gamma);
 
             H=sym('H',[8 1]);
             G=cell(1,8);
@@ -175,14 +169,9 @@ function [A,B,h] = ErrorModeling(option,gamma)
             for i=1:8
                 F{i}=B{round(i/2)};
             end
-
-            z=[];
-            Z=[];
             h=simplify(H);
             A=G;
             B=F;
-            clear H G F
-
         otherwise
             disp('Please select as valid model')
     end

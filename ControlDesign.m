@@ -11,7 +11,7 @@ switch ControlType
         
         if(Modeltype == 1)
             K = LMI_Teo6MozelliMOD(A,B,fi,mu);
-        elseif(Modeltype == 2)
+        else
             K = LMI_Teo6Mozelli(A,B,fi,mu);
         end
         ControlType = 'PDC';
