@@ -85,7 +85,7 @@ InitERROR = InitSTATE - DES_STATE(1,:)';
 %                                 SimStruct); 
 
 
-options = odeset('RelTol',1e-13,'AbsTol',1e-20);
+options = odeset('RelTol',1e-9,'AbsTol',1e-9);
 [t,STATE] = ode45(@(t,y) DRONE_SANTANA(t,y,SimStruct),t,InitSTATE,options);
 [t,ERROR] = ode45(@(t,y) ERROR_Fuzzy(t,y,SimStruct),t,InitERROR,options);
                                  
