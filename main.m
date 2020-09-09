@@ -13,9 +13,9 @@ PosZ    = 7;
 PosYaw  = 8;
 %% SYSTEM INIT AND SIM PARAMETERS
 
-InitSTATE=rand([8,1]); %[0;0;0;0;0;0;0;0];
+InitSTATE=0*rand([8,1]); %[0;0;0;0;0;0;0;0];
 sphinx = true; %flag for which gamma we use
-tol = 12;
+tol = 9;
 
 simStep = 0.025;
 Tfinal  = 30;
