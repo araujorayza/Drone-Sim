@@ -1,4 +1,5 @@
 function dSTATE = DRONE_SANTANA(t,STATE,Simu)
+    global small_k;
     gamma = Simu.sys.param;
     psi=STATE(8);
 
@@ -27,7 +28,7 @@ function dSTATE = DRONE_SANTANA(t,STATE,Simu)
 
     [q_d,dq_d,ddq_d]=CalcDesTrajectory(Simu.trajectory,t);
     V = CalcVirtControlLaw(Simu.controller,t,STATE,[dq_d;q_d]);
-    U=M\(V + N*R'*dq_d + ddq_d);
+    U=M\(V + N*R'*dq_d + ddq_d - small_k*(STATE(5:8)-q_d));
     
      
     dSTATE = A*STATE + B*U;

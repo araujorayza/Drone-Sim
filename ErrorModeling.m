@@ -1,4 +1,5 @@
 function [A,B,h] = ErrorModeling(option,gamma)
+    global small_k;
     switch option
         case 1
             psi = sym('psi','real');
@@ -54,7 +55,7 @@ function [A,B,h] = ErrorModeling(option,gamma)
             
             for i=1:ri
                 for j=1:ri
-                    A{i,j}=double([-N{i}*R{j}' zeros(4);
+                    A{i,j}=double([-N{i}*R{j}' -small_k*eye(4);
                         eye(4) zeros(4)]);
                 end
                 B{i}=double([eye(4);
@@ -94,7 +95,7 @@ function [A,B,h] = ErrorModeling(option,gamma)
                     z(2), z(1)-(gamma(4)+gamma(2)),     0,            0;
                     0,              0,              -gamma(6),        0;
                     0,              0,                  0,     -gamma(8)];
-                A{i} = double([NRt,    0*eye(4);
+                A{i} = double([NRt,    -small_k*eye(4);
                     eye(4),  zeros(4)]);
 
                 B{i} = double([eye(4);

@@ -15,6 +15,8 @@ PosYaw  = 8;
 
 InitSTATE=0*rand([8,1]); %[0;0;0;0;0;0;0;0];
 sphinx = true; %flag for which gamma we use
+global small_k 
+small_k = 1; %gain value of the error dynamic gain
 tol = 9;
 
 simStep = 0.025;
@@ -29,7 +31,7 @@ ControlType = 'MozelliTeo6';
 % ControlType = 'openloop';
 
 
-Modeltype = 4;
+Modeltype = 1;
 
 MaxRotSpd       = 100; %max rotation speed in deg/s (yaw rate)
 MaxXSpd         = 0.5; %max X speed in m/s 
@@ -103,4 +105,4 @@ SimStruct.sys.sat
 Output;
 
 Check_FuzzyTracking;
-
+figure(1)
