@@ -3,7 +3,9 @@ clear all;
 close all;
 syms psi real
 gamma = sym('gamma',[8 1]);
-assume(gamma,'real');
+assumeAlso(gamma,'real');
+global small_k;
+
 
 M = [ gamma(1)*cos(psi), -gamma(3)*sin(psi),      0,            0;
       gamma(1)*sin(psi),  gamma(3)*cos(psi),      0,            0;

@@ -16,7 +16,7 @@ PosYaw  = 8;
 InitSTATE=0*rand([8,1]); %[0;0;0;0;0;0;0;0];
 sphinx = true; %flag for which gamma we use
 global small_k 
-small_k = 1; %gain value of the error dynamic gain
+small_k = 0.1; %gain value of the error dynamic gain
 tol = 9;
 
 simStep = 0.025;
@@ -31,7 +31,7 @@ ControlType = 'MozelliTeo6';
 % ControlType = 'openloop';
 
 
-Modeltype = 1;
+Modeltype = 4;
 
 MaxRotSpd       = 100; %max rotation speed in deg/s (yaw rate)
 MaxXSpd         = 0.5; %max X speed in m/s 

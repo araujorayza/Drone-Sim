@@ -1,12 +1,13 @@
 Definitions;
-ModelType = 2
 
+ModelType = 4
+small_k = 1;
 
 fprintf('Nonlinear quadrotor model dx = Ax + Bu\n with x = [dq q]^T\n');
 
 n=length(N);
 
-Anl=[-N*R' zeros(n);
+Anl=[-N*R' -small_k*eye(n);
   eye(n) zeros(n)];
 
 Bnl=[M;zeros(n)];
