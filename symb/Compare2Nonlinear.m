@@ -3,7 +3,7 @@ Definitions;
 ModelType = 4
 small_k = 1;
 
-fprintf('Nonlinear quadrotor model dx = Ax + Bu\n with x = [dq q]^T\n');
+fprintf('Nonlinear error model dx = Ax + Bu\n with x = [de e]^T\n');
 
 n=length(N);
 

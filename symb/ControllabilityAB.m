@@ -10,12 +10,12 @@ Cont = simplify(Cont);
 Cont = rref(Cont);
 
 if (rank(Cont) == 8)
-    disp('Nonlinear model: Controllability matrix is Full rank!')
+    disp('Nonlinear QUADROTOR model: Controllability matrix is Full rank!')
 end
 % rank can't be trusted because it gives full rank 
 % even when I repeat one matrix in the controllability
 
-
+small_k = 0.1;
 %Lets check controllability of the ERROR models
 for ModelType=1:4
     fprintf('\nERROR MODEL #%d',ModelType)
