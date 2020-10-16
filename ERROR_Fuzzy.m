@@ -14,7 +14,7 @@ function dERROR = ERROR_Fuzzy(t,ERROR,Simu)
     STATE = ERROR + DES_STATE; 
     V = CalcVirtControlLaw(Simu.controller,t,STATE,DES_STATE);
 
-    if(Simu.controller.model.type == 1)
+    if(Simu.controller.model.type == 2)
         Ah     = 0*A{1,1};
         Bh     = 0*B{1};
         for i=1:length(h)
@@ -23,12 +23,6 @@ function dERROR = ERROR_Fuzzy(t,ERROR,Simu)
             end
             Bh=Bh+h(i)*B{i};
         end 
-    elseif(Simu.controller.model.type == 3)
-        Ah     = 0*A{1};
-        Bh     = B{1};
-        for i=1:length(h)
-            Ah=Ah+h(i)*A{i};
-        end
     else
         Ah     = 0*A{1};
         Bh     = 0*B{1};

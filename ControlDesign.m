@@ -9,7 +9,7 @@ switch ControlType
         fi=0.01*ones(size(A,2));
         mu=0.1;
         
-        if(Modeltype == 1)
+        if(Modeltype == 2)
             K = LMI_Teo6MozelliMOD(A,B,fi,mu);
         else
             K = LMI_Teo6Mozelli(A,B,fi,mu);

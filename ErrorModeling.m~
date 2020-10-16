@@ -123,8 +123,7 @@ function [A,B,h] = ErrorModeling(option,gamma)
                 for j=i:ri
                     H(k)=h(i)*h(j);
                     if(i~=j)
-                        G{k}=(A{i,j} + A{j,i})/2;
-                        H(k)=2*H(k);
+                        G{k}=(A{i,j} + A{j,i};
                     else
                         G{k}=A{i,j};
                     end
@@ -133,7 +132,8 @@ function [A,B,h] = ErrorModeling(option,gamma)
                 end
             end
             h=simplify(H);
-            %the h here NOW does sum 1
+            %the h here does not sum 1
+            %so you wont have B = sum(Bi*hi);
             A=G;
             B=F;
 
