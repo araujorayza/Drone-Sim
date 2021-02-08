@@ -27,7 +27,7 @@ TRAJECTORY      = 'circle';
 % TRAJECTORY = 'LemniscataBernoulli';
 
 
-ControlType = 'MozelliTeo6';
+ControlType = 'SereniTeo2';
 % ControlType = 'openloop';
 
 

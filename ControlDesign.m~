@@ -16,7 +16,7 @@ switch ControlType
         end
         ControlType = 'PDC';
     case 'SereniTeo2'
-        K = SereniTeo2(A,B)
+        
         ControlType = 'PDC';
     otherwise
         K=[];
@@ -169,8 +169,6 @@ end
 end
 
 function L = SereniTeo2(A,B)
-C = [eye(4), zeros(4)];
-
 N = size(A,2);
 nA = size(A{1,1},2);
 mB = size(B{1,1},2);
@@ -187,7 +185,6 @@ for i=1:N
     G{i} = sdpvar(nA,nA,'full');
     J{i} = sdpvar(mB,mC,'full');
 end
-disp('lets try to make a quadratic controller')
 K = Quadratic(A,B);
 LMIs = [P>0];
 for i=1:N
@@ -236,25 +233,17 @@ end
 function K = Quadratic(A,B)
 N = size(A,2);
 nA = size(A{1,1},2);
-mB = size(B{1,1},2);
 P = sdpvar(nA,nA,'symmetric');
-K = sdpvar(mB,nA,'full');
-
-LMIs = [P>0];
-
 for i=1:N
-    LMIs = [LMIs, (A{i}+B{i}*K)'*P+P*(A{i}+B{i}*K) < 0];
-end
-opts=sdpsettings;
-opts.solver = 'lmilab';
-sol = optimize(LMIs,[],opts);
-che=min(check(LMIs));
-if che > 0
-    disp('quadratico funcionou')
-    P = value(P);
-    K = value(K)
-else
-    K = []
-    disp('quadratico nao funcionou')
+    a11 = A{i}'*F{i}' + F{i}*A{i} + K'*B{i}'*F{i}' + F{i}*B{i}*K + 2*gama*P;
+    a21 = P - F{i}' + G{i}*A{i} + G{i}*B{i}*K;
+    a31 = B{i}'*F{i}' + J{i}*C{i} - H*K;
+    a22 = -G{i}-G{i}';
+    a32 = B{i}'*G{i}';
+    a33 = -H-H';
+    
+    LMIs = [LMIs,[a11 a21' a31';
+        a21 a22  a32';
+        a31 a32  a33]];
 end
 end
