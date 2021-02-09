@@ -19,8 +19,8 @@ global small_k
 small_k = 0.1; %gain value of the error dynamic gain
 tol = 9;
 
-simStep = 0.025;
-Tfinal  = 30;
+simStep = 1;
+Tfinal  = 6;
 
 TRAJECTORY      = 'circle';
 % TRAJECTORY      = 'openloop';
@@ -28,6 +28,8 @@ TRAJECTORY      = 'circle';
 
 
 ControlType = 'SereniTeo2';
+% MozelliTeo6
+% SereniTeo2
 % ControlType = 'openloop';
 
 

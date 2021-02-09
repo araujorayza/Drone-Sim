@@ -13,11 +13,21 @@ function U = CalcVirtControlLaw(Controller,t,State,DesState)
             h = double(h);
             
             U = [0;0;0;0];
-            for i=1:length(K)
-               U = U - K{i}*h(i)*(State - DesState);
-               %this control law was designed for the
-               %error dynamics so the 'state' it uses
-               %is the error in position and velocity
+            if(0)
+                for i=1:length(K)
+                   U = U - K{i}*h(i)*(State - DesState);
+                   %this control law was designed for the
+                   %error dynamics so the 'state' it uses
+                   %is the error in position and velocity
+                end
+            else
+                C = [eye(4), zeros(4)];
+                for i=1:length(K)
+                   U = U - K{i}*h(i)*C*(State - DesState);
+                   %this control law was designed for the
+                   %error dynamics so the 'state' it uses
+                   %is the error in position and velocity
+                end
             end
         otherwise
            U=zeros(4,length(t)); 
