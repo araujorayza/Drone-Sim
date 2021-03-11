@@ -13,21 +13,25 @@ function U = CalcVirtControlLaw(Controller,t,State,DesState)
             h = double(h);
             
             U = [0;0;0;0];
-            if(0)
-                for i=1:length(K)
-                   U = U - K{i}*h(i)*(State - DesState);
-                   %this control law was designed for the
-                   %error dynamics so the 'state' it uses
-                   %is the error in position and velocity
-                end
-            else
-                C = [eye(4), zeros(4)];
-                for i=1:length(K)
-                   U = U - K{i}*h(i)*C*(State - DesState);
-                   %this control law was designed for the
-                   %error dynamics so the 'state' it uses
-                   %is the error in position and velocity
-                end
+            
+            for i=1:length(K)
+                U = U - K{i}*h(i)*(State - DesState);
+                %this control law was designed for the
+                %error dynamics so the 'state' it uses
+                %is the error in position and velocity
+            end
+        case 'PDC_SOF'
+            h = Controller.model.h;
+            h = subs(h,'psi',State(8));
+            h = double(h);
+            
+            U = [0;0;0;0];
+            C = Controller.model.C;
+            for i=1:length(K)
+                U = U - K{i}*h(i)*C*(State - DesState);
+                %this control law was designed for the
+                %error dynamics so the 'state' it uses
+                %is the error in position and velocity
             end
         otherwise
            U=zeros(4,length(t)); 

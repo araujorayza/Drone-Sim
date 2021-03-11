@@ -1,4 +1,4 @@
-function dSTATE = DRONE_SANTANA(t,STATE,Simu)
+function [dSTATE,U] = DRONE_SANTANA(t,STATE,Simu)
     global small_k;
     gamma = Simu.sys.param;
     psi=STATE(8);

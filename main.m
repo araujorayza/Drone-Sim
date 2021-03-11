@@ -19,15 +19,16 @@ global small_k
 small_k = 0.1; %gain value of the error dynamic gain
 tol = 9;
 
-simStep = 1;
-Tfinal  = 6;
+simStep = 0.5;
+Tfinal  = 40;
 
 TRAJECTORY      = 'circle';
 % TRAJECTORY      = 'openloop';
 % TRAJECTORY = 'LemniscataBernoulli';
 
 
-ControlType = 'SereniTeo2';
+ControlType = 'WeiTeo1';
+% ControlType = 'WeiTeo1';
 % MozelliTeo6
 % SereniTeo2
 % ControlType = 'openloop';

@@ -1,5 +1,4 @@
 [A,B,h] = ErrorModeling(Modeltype,gamma);
-C = [zeros(4) eye(4)];
 
 switch ControlType
     case 'openloop'
@@ -23,44 +22,15 @@ switch ControlType
         %end
         ControlType = 'PDC_SOF';
     case 'SereniTeo2_Ulim'
+        C = [zeros(4) eye(4)];
         K = SereniTeo2_Ulim(A,B,C,0.04,2,0.8)
         ControlType = 'PDC_SOF';
     case 'WeiTeo1'
+        C = [zeros(4) eye(4)];
         r = 0.21; % Valor m�ximo para os autovalores de W
         K = WeiTeo1(A,B,C,r);
         ControlType = 'PDC_SOF';
-%         K{1} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{2} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{3} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{4} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{5} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{6} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{7} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{8} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
+        
     otherwise
         K=[];
         disp('The controller you chose is not an option!')
@@ -72,7 +42,6 @@ SimStruct.controller.type = ControlType;
 SimStruct.controller.model.type = Modeltype;
 SimStruct.controller.model.A = A;
 SimStruct.controller.model.B = B;
-SimStruct.controller.model.C = C;
 SimStruct.controller.model.h = h;
 SimStruct.controller.gain    = K;
 

@@ -9,30 +9,26 @@ plot(DES_STATE(:,PosX),DES_STATE(:,PosY),'k*');
 hold off
 grid on
 axis equal
-legend('Trajectory')
+title('Trajectory')
+fprintf('%d Trajectory\n',h)
 legend('NonLinSys','FuzzyErrorSys','Ref')
 h=h+1;
 
 %%%%%%%%%%%%%%%%%CONTROL SIGNAL PLOT%%%%%%%%%%%%%%%%%%%%%%%
-% figure(h);
-% U = zeros(4,length(t));
-% V = U;
-% 
-% for i = 1:length(t)
-%     U(:,i) = CalcVirtControlLaw(ControllerStruct,t(i),STATE(i,:)',ddq_d(:,i),dq_d(:,i),q_d(:,i));
-% %     V(:,i)=M\(U(:,i) + N*R'*dq_d + ddq_d);
-% %     
-% %     if (controller.sat)
-% %         V=saturate_control(V);
-% %     end
-% end 
-% 
-% plot(t',U,'d');
-% grid on
-% title('Control Signal')
-% legend('U_x','U_y','U_z','U_y_a_w');
-% h=h+1;
+figure(h);
+U = zeros(4,length(t));
+V = U;
 
+for i = 1:length(t)
+    [~,U(:,i)] = DRONE_SANTANA(t(i),STATE(i,:)',SimStruct);
+
+end 
+plot(t',U,'d');
+grid on
+title('Control Signal')
+fprintf('%d Control Signal\n',h)
+legend('U_x','U_y','U_z','U_y_a_w');
+h=h+1;
 
 
 %%%%%%%%%%%%%%%%%COMPONENT PLOT%%%%%%%%%%%%%%%%%%%%%%%
@@ -45,6 +41,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('x(t)')
+fprintf('%d x(t)\n',h)
 h=h+1;
 
 figure(h);
@@ -56,6 +53,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('y(t)')
+fprintf('%d y(t)\n',h)
 h=h+1;
 
 figure(h);
@@ -67,6 +65,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('z(t)')
+fprintf('%d z(t)\n',h)
 h=h+1;
 
 figure(h);
@@ -78,6 +77,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('yaw(t)')
+fprintf('%d yaw(t)\n',h)
 h=h+1;
 
 if(SimStruct.WindDisturbance.Type)
@@ -100,6 +100,7 @@ figure(h);
 plot(t,ERROR,'d');
 grid on
 title('Error')
+fprintf('%d Error\n',h)
 h=h+1;
 
 
@@ -113,6 +114,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Velx(t)')
+fprintf('%d Velx(t)\n',h)
 h=h+1;
 
 figure(h);
@@ -124,6 +126,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Vely(t)')
+fprintf('%d Vely(t)\n',h)
 h=h+1;
 
 figure(h);
@@ -135,6 +138,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Velz(t)')
+fprintf('%d Velz(t)\n',h)
 h=h+1;
 
 figure(h);
@@ -146,6 +150,7 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Velyaw(t)')
+fprintf('%d Velyaw(t)\n',h)
 h=h+1;
 
 

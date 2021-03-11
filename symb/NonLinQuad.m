@@ -9,6 +9,8 @@ A=[-N*R' zeros(n);
 
 B=[M;zeros(n)];
 
+C=[zeros(n) eye(n)];
+
 
 
 
