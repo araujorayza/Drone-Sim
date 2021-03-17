@@ -1,5 +1,14 @@
-function [A,B,h] = ErrorModeling(option,gamma)
+function [A,B,h,C] = ErrorModeling(option,gamma)
     global small_k;
+        C = [zeros(4) eye(4)];
+%     C = [1 0 0 0 0 0 0 0;
+%         0 1 0 0 0 0 0 0;
+%         %0 0 1 0 0 0 0 0;
+%         %0 0 0 1 0 0 0 0;
+%         0 0 0 0 1 0 0 0;
+%         0 0 0 0 0 1 0 0;
+%         0 0 0 0 0 0 1 0;
+%         0 0 0 0 0 0 0 1];
     switch option
         case 1
             %This has been tested and is tracking the nonlinear system

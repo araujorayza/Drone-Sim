@@ -1,6 +1,5 @@
 function U = CalcVirtControlLaw(Controller,t,State,DesState)
     K=Controller.gain;
-    
     switch Controller.type
         case 'openloop'
             U=ones(length(t)).*[sin(t)+sin(1.3*t);

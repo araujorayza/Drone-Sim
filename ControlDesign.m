@@ -1,6 +1,4 @@
-[A,B,h] = ErrorModeling(Modeltype,gamma);
-C = [zeros(4) eye(4)];
-
+[A,B,h,C] = ErrorModeling(Modeltype,gamma)
 switch ControlType
     case 'openloop'
         K = zeros(4);
@@ -17,50 +15,27 @@ switch ControlType
         end
         ControlType = 'PDC';
     case 'SereniTeo2'
-        C = [zeros(4) eye(4)];
         %for i=0:1:100
-            K = SereniTeo2(A,B,C,0.06)
+            K = SereniTeo2(A,B,C,0.06);
         %end
         ControlType = 'PDC_SOF';
     case 'SereniTeo2_Ulim'
-        K = SereniTeo2_Ulim(A,B,C,0.04,2,0.8)
+        K = SereniTeo2_Ulim(A,B,C,0.04,2,0.8);
         ControlType = 'PDC_SOF';
     case 'WeiTeo1'
         r = 0.21; % Valor m�ximo para os autovalores de W
         K = WeiTeo1(A,B,C,r);
         ControlType = 'PDC_SOF';
-%         K{1} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{2} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{3} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{4} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{5} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{6} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{7} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
-% K{8} =     [0.5994    0.0000   -0.0000    0.0000;
-%    -0.0000    0.5994   -0.0000   -0.0000;
-%     0.0000   -0.0000    0.5825   -0.0000;
-%     0.0000    0.0000    0.0000    0.6094];
+    case 'teste'
+        mu=0.01;
+        K = lmi_Dong2013(A,B,C,mu)
+        ControlType = 'PDC_SOF';
+    case 'ICUAS'
+        MaxRotSpd
+        phi=0.95;
+        Mu=1;
+        K = ICUAS_Teo1(Modeltype,A,B,phi,Mu)
+        ControlType = 'PDC';
     otherwise
         K=[];
         disp('The controller you chose is not an option!')
@@ -208,7 +183,7 @@ if p > 0
     end
 else
     K=[];
-    display('LMIs Infactiveis')
+    error('LMIs Infactiveis')
 end
 end
 
@@ -424,16 +399,13 @@ N = size(A,2);
 nA = size(A{1,1},2);
 mB = size(B{1,1},2);
 W = sdpvar(nA,nA,'symmetric');
-r = 0.21; % Valor m�ximo para os autovalores de W
 Z = sdpvar(mB,nA,'full');
-clear LMIs
 LMIs = W>=r*eye(nA);
 for i1=1:N
     a11 = A{i1}*W+W*A{i1}'-B{i1}*Z-Z'*B{i1}';
     LMIs = [LMIs, [a11 Z';Z -eye(mB)]<=0];
 end
 LMIs = [LMIs, [-W/r Z';Z -eye(mB)]<=0];
-
 % Configurando o Solver.
 opts=sdpsettings;
 % opts.solver='lmilab';
@@ -449,23 +421,221 @@ if che > 0
     P = inv(W);
     Z = value(Z);
     K = cell(1,N);    
-    AutoWZ=[]; AutoCW=[]; AutoA=[];
+%     AutoWZ=[]; AutoCW=[]; AutoA=[];
     for i1=1:N
-        K{i1} = Z*inv(W)*pinv(C);
-        AutoWZ=[AutoWZ real(eig(A{i1}*W-B{i1}*Z))];
-        AutoCW=[AutoCW real(eig((A{i1}-B{i1}*K{i1}*C)*W))];
-        AutoA =[AutoA  real(eig(A{i1}-B{i1}*K{i1}*C))];
+        K{i1} = -Z*inv(W)*pinv(C);
+%         AutoWZ=[AutoWZ real(eig(A{i1}*W-B{i1}*Z))];
+%         AutoCW=[AutoCW real(eig((A{i1}-B{i1}*K{i1}*C)*W))];
+%         AutoA =[AutoA  real(eig(A{i1}-B{i1}*K{i1}*C))];
     end
     Z
     Y1=K{1}*C*W
-    AutoWZ
-    AutoCW
-    AutoA
+%     AutoWZ
+%     AutoCW
+%     AutoA
     %celldisp(K)
-    MAX_Auto=max(max(real(AutoA)))
+%     MAX_Auto=max(max(real(AutoA)))
 else
     K=[];
     error('infactivel')
+end
+end
+
+function L = lmi_Dong2013(A,B,C,mu)
+rp = size(A,2);
+% Condi��es de estabilidade baseadas no Dong 2013 com 
+nA = size(A{1,1},2);
+nB = size(B{1,1},2);
+nC = size(C,1);
+
+% Criando as vari�veis matriciais
+  G = sdpvar(nC,nC,'full');
+  T = inv(C*C'); % Matriz definida em (9) de [J. Dong and G. Yang, 2013]
+  Q = cell(1,rp);
+  L = sdpvar(nB,nC,'full');
+Restr = [];
+for t1=1:rp
+    Q{1,t1} = sdpvar(nA,nA,'symmetric');
+    Restr = [Restr,Q{1,t1}>=0];
+end
+% Criando as estruturas matriciais usadas nas LMIs
+LMI = cell(rp,rp);
+for t1=1:rp
+    for t2=1:rp
+      a11=A{1,t1}*Q{1,t2}+Q{1,t2}*A{1,t1}'+...
+          B{1,t1}*L*T*C+(B{1,t1}*L*T*C)';
+      a21=C*Q{1,t1}-G*T*C+mu*(B{1,t1}*L)';
+      a22=-mu*(G+G');
+      LMI{t1,t2} = [a11 a21';a21 a22];
+    end
+end
+% Criando as LMIs
+for t1=1:rp
+    for t2=t1:rp
+        Restr = [Restr,LMI{t1,t2}+LMI{t2,t1}<=0];
+    end
+end
+% Configurando o Solver.
+opts=sdpsettings;
+opts.savesolverinput=1;
+opts.savesolveroutput=1;
+% opts.solver='lmilab';
+% opts.solver='sedumi';
+opts.verbose=0;
+% Resolvendo as LMIs
+sol = optimize(Restr,[],opts);
+che=min(check(Restr));
+if che > 0
+      disp('DONG2013 - SIM')
+    % Encontra o valor num�rico das matrizes
+    G = value(G);
+    L = value(L)*inv(G);
+    for i1=1:rp,
+       Q{1,i1}  = value(Q{1,i1});
+    end
+else
+    L=[];
+    disp('DONG2013 - N�O')
+end
+end
+
+function K = ICUAS_Teo1(Modeltype,A,B,phi,Mu)
+%LMIs implemeted based on Theorem 1 from paper "------" ICUAS 2020
+theta1=0.06; theta2=1;
+[nx,nu]=size(B{1});
+r = length(A); 
+%sdpvar Mu
+W = sdpvar(nx,nx,'full');
+Q = cell(1,r);
+Y = cell(r);
+LMIs = [];
+LMIs = [LMIs, Mu>=0];
+for i=1:r
+    Q{i}= sdpvar(nx,nx,'symmetric');
+    Y{i}= sdpvar(nu,nx,'full');
+    LMIs = [LMIs, Q{i}>=0];
+end
+
+G=PdotConvex(log2(r));
+eta = length(G);
+Qbar = cell(1,eta);
+for l=1:eta
+    Qbar{l} = 0;
+    for i=1:r
+        Qbar{l} = Qbar{l} + phi*G(i,l)*Q{i};
+    end
+end
+
+if(Modeltype == 2) %model with two indices
+    B=B{1,1};
+    for i = 1:r
+        for j = 1:r
+            for l = 1:eta
+                a11 = Qbar{l} - A{i,j}*W - ...
+                    W'*A{i,j}' + B*Y{i} + Y{i}'*B';
+                a21 = Q{i} + W' - Mu*(A{i,j}*W - B*Y{i});
+                a22 = Mu*(W+W');
+                Upsilon{i,j,l} = [a11, a21';
+                    a21, a22];
+            end
+        end
+    end
     
+else
+    B=B{1,1};
+    for i = 1:r
+        for l = 1:eta
+            a11 = Qbar{l} - A{i}*W - ...
+                W'*A{i}' + B*Y{i} + Y{i}'*B';
+            a21 = Q{i} + W' - Mu*(A{i}*W - B*Y{i});
+            a22 = Mu*(W+W');
+            Upsilon{i,l} = [a11, a21';
+                a21, a22];
+        end
+    end
+end
+
+
+% Criando as LMIs
+for i=1:r
+    LMIs = [LMIs, Q{i} >= theta2*eye(nx)];
+    SizeConstr = [theta1*eye(nu), Y{i};
+                    Y{i}',    eye(nx)];
+    LMIs = [LMIs, SizeConstr>=0];
+    for j=1:r
+        if(i==j)
+            continue;
+        end
+        for l=1:eta
+            if(Modeltype == 2) %model with two indices
+                LMIs = [LMIs, Upsilon{i,i,l}<=0];
+                LMIs = [LMIs, 2/(r-1)*Upsilon{i,i,l} + ...
+                    Upsilon{i,j,l} + Upsilon{j,i,l}<=0];
+            else
+                LMIs = [LMIs, Upsilon{i,l}<=0];
+            end
+            
+        end
+    end
+end
+
+% Configurando o Solver.
+opts=sdpsettings;
+% opts.solver='lmilab';
+opts.verbose=0;
+% Resolvendo as LMIs
+sol = solvesdp(LMIs,[],opts);
+che=min(checkset(LMIs));
+if che > 0
+    % Encontra o valor num�rico das matrizes
+    W=double(W);
+    K = cell(1,r);
+    for i=1:r
+        K{i} = double(Y{i})/W;
+    end
+else
+    error('LMIs infact�veis')
+    Q=[]; W=[]; K=[];
 end
 end
+
+function G=PdotConvex(p)
+
+% Local models
+ri=2^p;
+
+% Total of columns possibilities
+m2=2^ri;
+
+% Number of columns of Total matrix
+co=factorial(2^p)/(factorial(2^p/2)^2);
+
+
+th=0:1:m2-1;
+
+Vaux1=cell(1,m2);
+
+for i=1:length(th)
+    Vaux1{1,i}=de2bi([th(i)],ri);
+end
+
+Vaux2=zeros(ri,m2);
+for j=1:m2
+    for i=1:ri
+        Vaux2(i,j)=(-1)^Vaux1{1,j}(i);
+    end
+end
+
+% Total matrix
+G=[];
+
+for j=1:m2
+        if sum(Vaux2(:,j))==0
+            G=[G, Vaux2(:,j)];
+       end
+end
+
+
+end
+
+

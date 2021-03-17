@@ -1,6 +1,6 @@
-h=1;
+c=1;
 %%%%%%%%%%%%%%%%%TRAJECTORY PLOT%%%%%%%%%%%%%%%%%%%%%%%
-figure(h);
+figure(c);
 
 hold on;
 plot(STATE(:,PosX),STATE(:,PosY),'*');
@@ -10,12 +10,12 @@ hold off
 grid on
 axis equal
 title('Trajectory')
-fprintf('%d Trajectory\n',h)
+fprintf('%d Trajectory\n',c)
 legend('NonLinSys','FuzzyErrorSys','Ref')
-h=h+1;
+c=c+1;
 
 %%%%%%%%%%%%%%%%%CONTROL SIGNAL PLOT%%%%%%%%%%%%%%%%%%%%%%%
-figure(h);
+figure(c);
 U = zeros(4,length(t));
 V = U;
 
@@ -26,13 +26,13 @@ end
 plot(t',U,'d');
 grid on
 title('Control Signal')
-fprintf('%d Control Signal\n',h)
+fprintf('%d Control Signal\n',c)
 legend('U_x','U_y','U_z','U_y_a_w');
-h=h+1;
+c=c+1;
 
 
 %%%%%%%%%%%%%%%%%COMPONENT PLOT%%%%%%%%%%%%%%%%%%%%%%%
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,PosX),'*');
 plot(t,ERROR(:,PosX)+ DES_STATE(:,PosX),'rd');
@@ -41,10 +41,10 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('x(t)')
-fprintf('%d x(t)\n',h)
-h=h+1;
+fprintf('%d x(t)\n',c)
+c=c+1;
 
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,PosY),'*');
 plot(t,ERROR(:,PosY)+ DES_STATE(:,PosY),'rd');
@@ -53,10 +53,10 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('y(t)')
-fprintf('%d y(t)\n',h)
-h=h+1;
+fprintf('%d y(t)\n',c)
+c=c+1;
 
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,PosZ),'*');
 plot(t,ERROR(:,PosZ)+ DES_STATE(:,PosZ),'rd');
@@ -65,10 +65,10 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('z(t)')
-fprintf('%d z(t)\n',h)
-h=h+1;
+fprintf('%d z(t)\n',c)
+c=c+1;
 
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,PosYaw),'*');
 plot(t,ERROR(:,PosYaw)+ DES_STATE(:,PosYaw),'rd');
@@ -77,11 +77,11 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('yaw(t)')
-fprintf('%d yaw(t)\n',h)
-h=h+1;
+fprintf('%d yaw(t)\n',c)
+c=c+1;
 
 if(SimStruct.WindDisturbance.Type)
-    figure(h);
+    figure(c);
     D = zeros(4,length(t));
 
     for i = 1:length(t)
@@ -92,20 +92,20 @@ if(SimStruct.WindDisturbance.Type)
     grid on
     % legend('$D_x$','$D_y$','$D_z$','$D_{\psi}$');
     legend('Disturbance Signal')
-    h=h+1;
+    c=c+1;
 end 
 
 %%%%%%%%%%%%%%%%%ERROR PLOT%%%%%%%%%%%%%%%%%%%%%%%
-figure(h);
+figure(c);
 plot(t,ERROR,'d');
 grid on
 title('Error')
-fprintf('%d Error\n',h)
-h=h+1;
+fprintf('%d Error\n',c)
+c=c+1;
 
 
 %%%%%%%%%%%%%%%%%COMPONENT  VELOCITY PLOT%%%%%%%%%%%%%%%%%%%%%%%
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,VelX),'*');
 plot(t,ERROR(:,VelX)+ DES_STATE(:,VelX),'rd');
@@ -114,10 +114,10 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Velx(t)')
-fprintf('%d Velx(t)\n',h)
-h=h+1;
+fprintf('%d Velx(t)\n',c)
+c=c+1;
 
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,VelY),'*');
 plot(t,ERROR(:,VelY)+ DES_STATE(:,VelY),'rd');
@@ -126,10 +126,10 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Vely(t)')
-fprintf('%d Vely(t)\n',h)
-h=h+1;
+fprintf('%d Vely(t)\n',c)
+c=c+1;
 
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,VelZ),'*');
 plot(t,ERROR(:,VelZ)+ DES_STATE(:,VelZ),'rd');
@@ -138,10 +138,10 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Velz(t)')
-fprintf('%d Velz(t)\n',h)
-h=h+1;
+fprintf('%d Velz(t)\n',c)
+c=c+1;
 
-figure(h);
+figure(c);
 hold on
 plot(t,STATE(:,VelYaw),'*');
 plot(t,ERROR(:,VelYaw)+ DES_STATE(:,VelYaw),'rd');
@@ -150,8 +150,8 @@ hold off
 grid on
 legend('NonLinSys','FuzzyErrorSys','Ref')
 title('Velyaw(t)')
-fprintf('%d Velyaw(t)\n',h)
-h=h+1;
+fprintf('%d Velyaw(t)\n',c)
+c=c+1;
 
 
 

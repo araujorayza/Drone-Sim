@@ -19,7 +19,7 @@ global small_k
 small_k = 0.1; %gain value of the error dynamic gain
 tol = 9;
 
-simStep = 0.5;
+simStep = 0.1;
 Tfinal  = 40;
 
 TRAJECTORY      = 'circle';
@@ -27,7 +27,7 @@ TRAJECTORY      = 'circle';
 % TRAJECTORY = 'LemniscataBernoulli';
 
 
-ControlType = 'WeiTeo1';
+ControlType = 'ICUAS';
 % ControlType = 'WeiTeo1';
 % MozelliTeo6
 % SereniTeo2
@@ -62,8 +62,10 @@ if(sphinx)
 else
     load gamma_bebop
 end
-
-
+%  gamma=[-0.2630;   0.1270;   -0.3034;   0.1594;...
+%         0.0502;    0.2888;   -0.0066;   0.0079];
+% gamma=0.5*ones(8,1);
+    
 SimStruct.trajectory=TRAJECTORY;
 SimStruct.sys.param = gamma;
 SimStruct.WindDisturbance.Type = Wind_Disturbance;
