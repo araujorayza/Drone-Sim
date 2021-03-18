@@ -509,7 +509,7 @@ W = sdpvar(nx,nx,'full');
 Q = cell(1,r);
 Y = cell(r);
 LMIs = [];
-LMIs = [LMIs, Mu>=0];
+%LMIs = [LMIs, Mu>=0];
 for i=1:r
     Q{i}= sdpvar(nx,nx,'symmetric');
     Y{i}= sdpvar(nu,nx,'full');
