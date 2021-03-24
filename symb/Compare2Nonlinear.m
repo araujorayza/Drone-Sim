@@ -1,6 +1,6 @@
 Definitions;
 
-ModelType = 2
+ModelType = 1
 small_k = 1;
 
 fprintf('Nonlinear error model dx = Ax + Bu\n with x = [de e]^T\n');

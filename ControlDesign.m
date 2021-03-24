@@ -501,21 +501,21 @@ end
 
 function K = ICUAS_Teo1(Modeltype,A,B,phi,Mu)
 %LMIs implemeted based on Theorem 1 from paper "------" ICUAS 2020
-theta1=0.06; theta2=1;
+theta1=0.35; theta2=-0.5; dec=0.25; % maxU = 0.8632    0.5923    7.3816    0.0005
 [nx,nu]=size(B{1});
 r = length(A); 
-%sdpvar Mu
 W = sdpvar(nx,nx,'full');
 Q = cell(1,r);
 Y = cell(r);
 LMIs = [];
-%LMIs = [LMIs, Mu>=0];
 for i=1:r
     Q{i}= sdpvar(nx,nx,'symmetric');
     Y{i}= sdpvar(nu,nx,'full');
     LMIs = [LMIs, Q{i}>=0];
 end
-
+if(Modeltype == 3 || Modeltype == 4)
+    warning('Local Models not based on nonlinearity, check how the matrix G is made')
+end
 G=PdotConvex(log2(r));
 eta = length(G);
 Qbar = cell(1,eta);
@@ -532,7 +532,7 @@ if(Modeltype == 2) %model with two indices
         for j = 1:r
             for l = 1:eta
                 a11 = Qbar{l} - A{i,j}*W - ...
-                    W'*A{i,j}' + B*Y{i} + Y{i}'*B';
+                      W'*A{i,j}' + B*Y{i} + Y{i}'*B'+2*dec*Q{i};
                 a21 = Q{i} + W' - Mu*(A{i,j}*W - B*Y{i});
                 a22 = Mu*(W+W');
                 Upsilon{i,j,l} = [a11, a21';
@@ -540,13 +540,12 @@ if(Modeltype == 2) %model with two indices
             end
         end
     end
-    
 else
     B=B{1,1};
     for i = 1:r
         for l = 1:eta
             a11 = Qbar{l} - A{i}*W - ...
-                W'*A{i}' + B*Y{i} + Y{i}'*B';
+                W'*A{i}' + B*Y{i} + Y{i}'*B'+2*dec*Q{i};
             a21 = Q{i} + W' - Mu*(A{i}*W - B*Y{i});
             a22 = Mu*(W+W');
             Upsilon{i,l} = [a11, a21';
@@ -557,8 +556,8 @@ end
 
 
 % Criando as LMIs
+LMIs = [LMIs, W+W'<=theta2*eye(nx)];
 for i=1:r
-    LMIs = [LMIs, Q{i} >= theta2*eye(nx)];
     SizeConstr = [theta1*eye(nu), Y{i};
                     Y{i}',    eye(nx)];
     LMIs = [LMIs, SizeConstr>=0];
@@ -582,6 +581,7 @@ end
 % Configurando o Solver.
 opts=sdpsettings;
 % opts.solver='lmilab';
+opts.solver='sedumi';
 opts.verbose=0;
 % Resolvendo as LMIs
 sol = solvesdp(LMIs,[],opts);
@@ -634,8 +634,6 @@ for j=1:m2
             G=[G, Vaux2(:,j)];
        end
 end
-
-
 end
 
 

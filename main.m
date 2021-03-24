@@ -22,7 +22,7 @@ tol = 9;
 simStep = 0.1;
 Tfinal  = 40;
 
-TRAJECTORY      = 'circle';
+TRAJECTORY      = 'teste';
 % TRAJECTORY      = 'openloop';
 % TRAJECTORY = 'LemniscataBernoulli';
 
